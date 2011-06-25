@@ -2,9 +2,6 @@
 #include <bitset>
 #include <vector>
 #include <set>
-
-#include <iostream>
-
 #include <stdint.h>
 
 using namespace std;
@@ -17,7 +14,7 @@ struct gameGrid {
 };
 
 uint64_t puzzles[10] = {
-	0x12345678D9BCAE0Fll, 0x12345678AF0B9DECll,
+	0x12345678D9BCAE0Fll, 0x12345678AF0B9DECll, 
 	0x51342A68907CDEBFll, 0x26341A7805BC9DEFll,
 	0x51249638DA7CEB0Fll, 0x123469705AB8DEFCll,
 	0x13745208A6EC9BDFll, 0x1234A6B709F85DECll,
