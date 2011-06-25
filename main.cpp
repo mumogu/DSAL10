@@ -29,34 +29,15 @@ uint64_t correct = 0x123456789ABCDEF0ll;
 // Returns the position of the empty cell. Numering is from bottom right to top left starting at 0
 int findZero(uint64_t g) {
 	for(int i=0; i<16; i++) {
-		uint64_t msk = ((uint64_t)0xF << i*4);
-		uint64_t tmp = g & msk;
-		if(tmp == 0)
+		if((g & ((uint64_t)0xF << i*4)) == 0)
 			return i;
 	}
 	return 0;
 }
 
+// Who's the boss now?
 uint64_t swapNibble(uint64_t g, int zero, int data) {
-	
-	// Fitst, copy the bits in data to tmp
-	uint64_t msk = ((uint64_t)0xF << (4*data));
-	uint64_t tmp = g & msk;
-	
-	// Move bits in temp to the rightmost nibble
-	tmp = tmp >> (4*data);
-	
-	// Now move temp to the zero-th bit
-	tmp = tmp << 4*zero;
-	
-	// Now zero-out the bits in data
-	msk = ~((uint64_t)0xF << 4*data);
-	g = g & msk;
-	
-	// Now write tmp to zero
-	g = g | tmp;
-	
-	return g;
+	return (((g & ((uint64_t)0xF << (4*data))) >> (4*data)) << 4*zero) | (g & ~((uint64_t)0xF << 4*data));
 }
 
 void printSolution(vector<char> h) {
