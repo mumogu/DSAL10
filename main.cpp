@@ -1,4 +1,3 @@
-#include <list>
 #include <queue>
 #include <bitset>
 #include <vector>
