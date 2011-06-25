@@ -67,7 +67,7 @@ void solve(grid problem) {
 	// We need to kepp track, of which boards be have already explored
 	set<unsigned long> seen; // Set is probably implemented as a binary tree
 
-	struct gameGrid current;
+	gameGrid current;
 	
 	while(!q.empty()) {
 		current = q.front();
