@@ -3,6 +3,10 @@
 #include <vector>
 #include <set>
 
+#include <iostream>
+
+#include <stdint.h>
+
 using namespace std;
 
 typedef bitset<64> grid; // Just for my personal lazyness
@@ -23,12 +27,14 @@ grid puzzles[10] = {
 grid correct = 0x123456789ABCDEF0ll;
 
 // Returns the position of the empty cell. Numering is from bottom right to top left starting at 0
-int findZero(grid b) {
+int findZero(uint64_t g) {
 	for(int i=0; i<16; i++) {
-		if(b[i*4] == 0 && b[i*4+1] == 0 && b[i*4+2] == 0 && b[i*4+3] == 0)
-			return i;		
-	}	
-	return 0; // Just to shut up the Compiler-Warning
+		uint64_t msk = ((uint64_t)0xF << i*4);
+		uint64_t tmp = g & msk;
+		if(tmp == 0)
+			return i;
+	}
+	return 0;
 }
 
 grid swapNibble(grid g, int zero, int dest) {
@@ -57,7 +63,7 @@ void processCandidate(grid* pCandidate, gameGrid* pCurrent, queue<gameGrid>* pQ,
 		(*pSeen).insert((*pCandidate).to_ulong());		
 	}
 }
-
+/*
 void solve(grid problem) {	
 	queue<gameGrid> q; // working queue for BFS
 
@@ -100,11 +106,41 @@ void solve(grid problem) {
 	printf("Length of solution is: %d\n", (int)current.h.size());
 	printf("Size of seen is: %d", (int)seen.size());
 }
+*/
+uint64_t swap(uint64_t g, int zero, int data) {
+
+	// Fitst, copy the bits in data
+	uint64_t msk = ((uint64_t)0xF << (4*data));
+	uint64_t tmp = g & msk;
+	
+	// Move bits in temp to the rightmost nibble
+	tmp = tmp >> (4*data);
+	
+	// Now move temp to the zero-th bit
+	tmp = tmp << 4*zero;
+	
+	// Now zero-out the bits in data
+	msk = ~((uint64_t)0xF << 4*data);
+	g = g & msk;
+	
+	// Now write tmp to zero
+	g = g | tmp;
+	
+	return g;
+}
 
 int main (int argc, char * const argv[]) {
+	uint64_t in = 0x123456789ABCDEF0ull;	
+	
+	cout << hex << in << endl;
+	cout << hex << swap(in, 0, 12) << endl;
+
+	
+	/*
 	for(int i=0; i<10; i++) {
 		printf("Puzzle #%d:", i+1);
 		solve(puzzles[i]);
 		printf("\n\n");
 	}
+	*/
 }
