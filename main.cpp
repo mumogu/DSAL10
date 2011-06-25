@@ -47,8 +47,7 @@ void processCandidate(uint64_t* pCandidate, gameGrid* pCurrent, queue<gameGrid>*
 		vector<char> currentHistory = (*pCurrent).h;
 		currentHistory.push_back(direction);
 		
-		gameGrid temp = {*pCandidate, currentHistory};
-		(*pQ).push(temp);
+		(*pQ).push((gameGrid){*pCandidate, currentHistory});
 		
 		(*pSeen).insert(*pCandidate);		
 	}
