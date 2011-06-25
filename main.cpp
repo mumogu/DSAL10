@@ -10,7 +10,7 @@ typedef bitset<64> grid;
 
 struct gameGrid {
 	grid g;
-	vector<char> h;	
+	vector<char> h; // History of swaps done to reach g
 };
 
 grid puzzles[10] = {
@@ -52,17 +52,17 @@ void printSolution(vector<char> h) {
 	}
 }
 
-void solve(grid start) {	
-	// Initialize the queue and stuff...
-	queue<gameGrid> q;
-	vector<char> empty;
-	struct gameGrid first = {start, empty};
-	struct gameGrid current;
-	q.push(first);
-	
-	// We need to kepp track, of which boards be have already explored
-	set<unsigned long> seen;
+void solve(grid problem) {	
+	queue<gameGrid> q; // working queue for BFS
 
+	vector<char> empty;
+	q.push((gameGrid){problem, empty});
+
+	// We need to kepp track, of which boards be have already explored
+	set<unsigned long> seen; // Set is probably implemented as a binary tree
+
+	struct gameGrid current;
+	
 	while(!q.empty()) {
 		current = q.front();
 		q.pop();
@@ -80,7 +80,7 @@ void solve(grid start) {
 				vector<char> currentHistory = current.h;
 				currentHistory.push_back('D');
 				
-				struct gameGrid temp = {candidate, currentHistory};
+				gameGrid temp = {candidate, currentHistory};
 				q.push(temp);
 				
 				seen.insert(candidate.to_ulong());
@@ -95,7 +95,7 @@ void solve(grid start) {
 				vector<char> currentHistory = current.h;
 				currentHistory.push_back('U');
 				
-				struct gameGrid temp = {candidate, currentHistory};
+				gameGrid temp = {candidate, currentHistory};
 				q.push(temp);
 				
 				seen.insert(candidate.to_ulong());
@@ -109,7 +109,7 @@ void solve(grid start) {
 				vector<char> currentHistory = current.h;
 				currentHistory.push_back('R');
 				
-				struct gameGrid temp = {candidate, currentHistory};
+				gameGrid temp = {candidate, currentHistory};
 				q.push(temp);
 				
 				seen.insert(candidate.to_ulong());
@@ -123,7 +123,7 @@ void solve(grid start) {
 				vector<char> currentHistory = current.h;
 				currentHistory.push_back('L');
 				
-				struct gameGrid temp = {candidate, currentHistory};
+				gameGrid temp = {candidate, currentHistory};
 				q.push(temp);				
 				
 				seen.insert(candidate.to_ulong());
