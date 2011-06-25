@@ -22,7 +22,7 @@ grid puzzles[10] = {
 
 grid correct = 0x123456789ABCDEF0ll;
 
-// Returns the position of the empty cell. Numering is from LSB to MSB starting at 0
+// Returns the position of the empty cell. Numering is from bottom right to top left starting at 0
 int findZero(grid b) {
 	for(int i=0; i<16; i++) {
 		if(b[i*4] == 0 && b[i*4+1] == 0 && b[i*4+2] == 0 && b[i*4+3] == 0)
