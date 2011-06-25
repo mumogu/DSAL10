@@ -139,7 +139,7 @@ void solve(grid start) {
 
 int main (int argc, char * const argv[]) {
 	for(int i=0; i<10; i++) {
-		printf("Puzzle #%d:", i);
+		printf("Puzzle #%d:", i+1);
 		solve(puzzles[i]);
 		printf("\n\n");
 	}
