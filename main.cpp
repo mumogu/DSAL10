@@ -5,8 +5,7 @@
 
 using namespace std;
 
-// Just for my personal lazyness
-typedef bitset<64> grid;
+typedef bitset<64> grid; // Just for my personal lazyness
 
 struct gameGrid {
 	grid g;
@@ -14,16 +13,11 @@ struct gameGrid {
 };
 
 grid puzzles[10] = {
-	0x12345678D9BCAE0Fll,
-	0x12345678AF0B9DECll,
-	0x51342A68907CDEBFll,
-	0x26341A7805BC9DEFll,
-	0x51249638DA7CEB0Fll,
-	0x123469705AB8DEFCll,
-	0x13745208A6EC9BDFll,
-	0x1234A6B709F85DECll,
-	0x3748150296BCDAEFll,
-	0x023716845AFB9DECll	
+	0x12345678D9BCAE0Fll, 0x12345678AF0B9DECll,
+	0x51342A68907CDEBFll, 0x26341A7805BC9DEFll,
+	0x51249638DA7CEB0Fll, 0x123469705AB8DEFCll,
+	0x13745208A6EC9BDFll, 0x1234A6B709F85DECll,
+	0x3748150296BCDAEFll, 0x023716845AFB9DECll	
 };
 
 grid correct = 0x123456789ABCDEF0ll;
@@ -52,6 +46,18 @@ void printSolution(vector<char> h) {
 	}
 }
 
+void processCandidate(grid* pCandidate, gameGrid* pCurrent, queue<gameGrid>* pQ, set<unsigned long>* pSeen, char direction) {
+	if((*pSeen).find((*pCandidate).to_ulong()) == (*pSeen).end()) {		
+		vector<char> currentHistory = (*pCurrent).h;
+		currentHistory.push_back(direction);
+		
+		gameGrid temp = {*pCandidate, currentHistory};
+		(*pQ).push(temp);
+		
+		(*pSeen).insert((*pCandidate).to_ulong());		
+	}
+}
+
 void solve(grid problem) {	
 	queue<gameGrid> q; // working queue for BFS
 
@@ -70,64 +76,23 @@ void solve(grid problem) {
 		if(current.g == correct)
 			break;
 		
-		int gap = findZero(current.g);		
+		int gap = findZero(current.g);			
 		
-		if(gap >= 4) {
-			// swap-down is possible
+		if(gap >= 4) { // swap-down is possible
 			grid candidate = swapNibble(current.g, gap, gap-4);
-
-			if(seen.find(candidate.to_ulong()) == seen.end()) {
-				vector<char> currentHistory = current.h;
-				currentHistory.push_back('D');
-				
-				gameGrid temp = {candidate, currentHistory};
-				q.push(temp);
-				
-				seen.insert(candidate.to_ulong());
-			}
-		}
-		
-		if(gap <= 11) {
-			// swap-up is possible			
-			grid candidate = swapNibble(current.g, gap, gap+4);
-			
-			if(seen.find(candidate.to_ulong()) == seen.end()) {
-				vector<char> currentHistory = current.h;
-				currentHistory.push_back('U');
-				
-				gameGrid temp = {candidate, currentHistory};
-				q.push(temp);
-				
-				seen.insert(candidate.to_ulong());
-			}
+			processCandidate(&candidate, &current, &q, &seen, 'D');			
 		}		
-		if(gap%4 != 0 ) {
-			// swap-right is possible			
+		if(gap <= 11) { // swap-up is possible			
+			grid candidate = swapNibble(current.g, gap, gap+4);			
+			processCandidate(&candidate, &current, &q, &seen, 'U');
+		}		
+		if(gap%4 != 0 ) { // swap-right is possible			
 			grid candidate = swapNibble(current.g, gap, gap-1);
-
-			if(seen.find(candidate.to_ulong()) == seen.end()) {
-				vector<char> currentHistory = current.h;
-				currentHistory.push_back('R');
-				
-				gameGrid temp = {candidate, currentHistory};
-				q.push(temp);
-				
-				seen.insert(candidate.to_ulong());
-			}
+			processCandidate(&candidate, &current, &q, &seen, 'R');
 		}		
-		if((gap+1)%4 != 0) {
-			// swap-left is possible	
-			grid candidate = swapNibble(current.g, gap, gap+1);
-			
-			if(seen.find(candidate.to_ulong()) == seen.end()) {
-				vector<char> currentHistory = current.h;
-				currentHistory.push_back('L');
-				
-				gameGrid temp = {candidate, currentHistory};
-				q.push(temp);				
-				
-				seen.insert(candidate.to_ulong());
-			}
+		if((gap+1)%4 != 0) { // swap-left is possible	
+			grid candidate = swapNibble(current.g, gap, gap+1);	
+			processCandidate(&candidate, &current, &q, &seen, 'L');
 		}	
 	}
 	
