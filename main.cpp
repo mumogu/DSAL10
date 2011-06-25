@@ -6,8 +6,6 @@
 
 using namespace std;
 
-//typedef bitset<64> grid; // Just for my personal lazyness
-
 struct gameGrid {
 	uint64_t g;
 	vector<char> h; // History of swaps done to reach g
