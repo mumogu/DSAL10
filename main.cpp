@@ -101,8 +101,7 @@ int main (int argc, char * const argv[]) {
             printf("Puzzle #%d:", i+1);
             solve(puzzles[i]);
             printf("\n");
-        });
-        
+        });        
 	}
     sleep(1000);
     printf("Leaving the stage. Thanks guys");
