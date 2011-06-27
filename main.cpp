@@ -2,7 +2,7 @@
 #include <vector>
 #include <set>
 #include <stdint.h>
-
+#include <dispatch/dispatch.h>
 using namespace std;
 
 struct gameGrid {
@@ -97,8 +97,13 @@ void solve(uint64_t problem) {
 
 int main (int argc, char * const argv[]) {	
 	for(int i=0; i<10; i++) {
-		printf("Puzzle #%d:", i+1);
-		solve(puzzles[i]);
-		printf("\n");
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, NULL), ^{
+            printf("Puzzle #%d:", i+1);
+            solve(puzzles[i]);
+            printf("\n");
+        });
+        
 	}
+    sleep(1000);
+    printf("Leaving the stage. Thanks guys");
 }
